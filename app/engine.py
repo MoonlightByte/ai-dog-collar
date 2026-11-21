@@ -22,6 +22,23 @@ if not os.path.exists(_cam_cfg):
                        f"fill in your camera (see docs/05-cameras.md).")
 CAM = json.load(open(_cam_cfg))["cameras"]["downstairs"]
 EVENTS_DIR = os.path.join(ROOT, "data", "events")
+# Armed/dry-run survives restarts. No saved state -> DOGCOLLAR_START_ARMED (default 0 = dry-run).
+STATE_FILE = os.path.join(ROOT, "data", "state.json")
+
+def _load_armed():
+    try:
+        return bool(json.load(open(STATE_FILE))["armed"])
+    except Exception:
+        return os.environ.get("DOGCOLLAR_START_ARMED", "0") == "1"
+
+def _save_armed(v):
+    try:
+        os.makedirs(os.path.dirname(STATE_FILE), exist_ok=True)
+        tmp = STATE_FILE + ".tmp"
+        with open(tmp, "w") as fh: json.dump({"armed": bool(v), "t": time.time()}, fh)
+        os.replace(tmp, STATE_FILE)
+    except Exception as e:
+        print("WARN: could not save armed state:", e, flush=True)
 os.makedirs(EVENTS_DIR, exist_ok=True)
 
 def _pi_config():
@@ -70,7 +87,8 @@ class Engine:
         self.consec = consec
         self.cooldown = cooldown
         self.model_name = model
-        self.armed = False            # dry-run by default
+        self.armed = _load_armed()    # persisted; see STATE_FILE
+        print(f"startup mode: {'ARMED (TONE)' if self.armed else 'DRY-RUN'}", flush=True)
         self.enabled = True           # detection on/off (camera always watched)
         self.lock = threading.Lock()
         self.run = True
@@ -308,7 +326,8 @@ class Engine:
                 yield b"--frame\r\nContent-Type: image/jpeg\r\n\r\n" + j + b"\r\n"
             time.sleep(0.1)
 
-    def set_armed(self, v): self.armed = bool(v)
+    def set_armed(self, v):
+        self.armed = bool(v); _save_armed(self.armed)
     def set_config(self, consec=None, cooldown=None):
         if consec: self.consec = int(consec); self.window = deque(self.window, maxlen=self.consec); self.recent = deque(self.recent, maxlen=max(self.consec+3,6))
         if cooldown is not None: self.cooldown = float(cooldown)
