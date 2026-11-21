@@ -1,0 +1,11 @@
+{
+  "cameras": {
+    "downstairs": {
+      "ip": "192.168.1.xxx",
+      "user": "YOUR_CAMERA_ACCOUNT_USER",
+      "pass": "YOUR_CAMERA_ACCOUNT_PASS",
+      "main": "stream1",
+      "sub": "stream2"
+    }
+  }
+}

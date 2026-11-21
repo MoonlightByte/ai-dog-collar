@@ -1,0 +1,24 @@
+# Internal planning + runtime state, not for the public repo
+PLAN.md
+captures/
+counter.txt
+*.log
+__pycache__/
+*.pyc
+.DS_Store
+# Camera credentials and captured training data — never publish
+*.local.json
+data/
+frames/
+*.jpg
+*.mp4
+zones.json
+data/events/
+*.pt
+kitchen_*.jpg
+chk_*.jpg
+test_*.jpg
+event*_gate*.jpg
+live_now.jpg
+# Pi token file
+*.env

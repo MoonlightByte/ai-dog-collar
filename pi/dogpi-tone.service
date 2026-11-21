@@ -1,0 +1,19 @@
+[Unit]
+Description=Dog collar TONE service (CC1101 433.92 MHz)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/dogcollar
+ExecStart=/usr/bin/python3 /home/pi/dogcollar/tone_service.py
+Restart=always
+RestartSec=2
+# Secret lives outside git: /home/pi/dogcollar/dogpi.env containing
+#   DOGPI_TOKEN=<output of: python3 -c "import secrets;print(secrets.token_urlsafe(24))">
+EnvironmentFile=/home/pi/dogcollar/dogpi.env
+Environment=DOGPI_COOLDOWN=5
+
+[Install]
+WantedBy=multi-user.target

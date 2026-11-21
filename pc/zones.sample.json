@@ -1,0 +1,10 @@
+{
+  "camera": "downstairs",
+  "view_w": 2560,
+  "view_h": 1440,
+  "note": "Polygons are normalized [0-1] of the frame (work at any resolution). type 'gate_top' = a gate's top rail (trigger when the dog rears onto it); type 'counter' = an off-limits surface top. Make this file with pc/make_zones.py, or edit by hand.",
+  "zones": {
+    "gate_left":  { "type": "gate_top", "poly": [[0.17,0.51],[0.29,0.52],[0.29,0.53],[0.17,0.52]] },
+    "island":     { "type": "counter",  "poly": [[0.54,0.66],[0.75,0.63],[0.78,0.70],[0.57,0.74]] }
+  }
+}

@@ -1,0 +1,13 @@
+# PC / vision + app side (Python 3.10+). Install into a venv or conda env.
+#
+# PyTorch with CUDA is NOT listed here — install the build that matches your GPU
+# first, from https://pytorch.org/get-started/locally/ (e.g. the cu118 wheels).
+# Then: pip install -r requirements.txt
+#
+ultralytics>=8.3      # YOLO (brings in a compatible opencv if not present)
+opencv-python>=4.9
+pillow>=10.0
+numpy>=1.26
+scipy>=1.11           # zone extraction (make_zones.py)
+fastapi>=0.110        # dashboard/app backend
+uvicorn>=0.29
